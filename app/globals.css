@@ -39,8 +39,13 @@
 
   --font-inter: var(--font-inter);
   --font-space-grotesk: var(--font-space-grotesk);
+
+  --background-image-auth-light: url("/images/auth-light.png");
+  --background-image-auth-dark: url("/images/auth-dark.png");
  
 }
+
+
 
 /* APPLY BACKGROUND + TEXT */
 body {
@@ -327,6 +332,14 @@ body {
   :root {
     --radius: 0.5rem;
   }
+}
+
+@utility bg-auth-light {
+  background-image: var(--background-image-auth-light);
+}
+
+@utility bg-auth-dark {
+  background-image: var(--background-image-auth-dark);
 }
 
 .custom-scrollbar::-webkit-scrollbar {

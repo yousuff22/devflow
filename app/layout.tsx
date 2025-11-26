@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import Navbar from "@/components/navigation/navbar";
 
 // Load Inter variable font (single .ttf file)
 const inter = localFont({
@@ -18,7 +17,7 @@ const spaceGrotesk = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dev-OverFlow",
+  title: "Dev OverFlow",
   description:
     "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developer from around the world. Explore topics in web development, mobile app development, algorithms, data structure and more.",
   icons: {
@@ -42,7 +41,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar/>
           {children}
         </ThemeProvider>
       </body>

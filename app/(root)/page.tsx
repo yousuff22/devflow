@@ -1,3 +1,4 @@
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -5,28 +6,89 @@ import ROUTES from "@/constants/routes";
 import Link from "next/link";
 
 interface HomeProps {
-  searchParams: {
-    query?: string;
+  searchParams: Promise<{
+    q?: string;
     filter?: string;
-  };
+  }>;
 }
 
-const dummyQuestions = [
-  { title: "How to use React Hooks?" },
-  { title: "What is Next.js server component?" },
-  { title: "How to deploy MERN app?" },
+const questions = [
+  {
+    _id: "1",
+    title: "How to learn React?",
+    description: "I want to learn React, can anyone help me?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+    },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date(),
+  },
+  {
+    _id: "2",
+    title: "How to learn JavaScript?",
+    description: "I am new to JavaScript, where should I start?",
+    tags: [
+      { _id: "2", name: "JavaScript" },
+      { _id: "3", name: "Beginner" },
+    ],
+    author: {
+      _id: "2",
+      name: "Alice Smith",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+    },
+    upvotes: 15,
+    answers: 3,
+    views: 250,
+    createdAt: new Date(),
+  },
+  {
+    _id: "3",
+    title: "What is Next.js?",
+    description: "Can someone explain what Next.js is and why it's useful?",
+    tags: [
+      { _id: "4", name: "Next.js" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: {
+      _id: "3",
+      name: "Michael Lee",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
+    },
+    upvotes: 20,
+    answers: 8,
+    views: 500,
+    createdAt: new Date(),
+  },
 ];
 
-const Home = ({ searchParams }: HomeProps) => {
-  const query = searchParams.query || "";
+const Home = async ({ searchParams }: HomeProps) => {
+  const params = await searchParams;
+  const query = params.q || "";
+  const filter = params.filter || "";
 
-  const filteredQuestions = dummyQuestions.filter((q) =>
+  // Filter by search query
+  let filteredQuestions = questions.filter((q) =>
     q.title.toLowerCase().includes(query.toLowerCase())
   );
 
+  // Filter by tag if filter is active
+  if (filter) {
+    filteredQuestions = filteredQuestions.filter((q) =>
+      q.tags.some((tag) => tag.name.toLowerCase() === filter.toLowerCase())
+    );
+  }
+
   return (
     <>
-      <section className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 sm:items-center">
+      <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
 
         <Button
@@ -48,9 +110,15 @@ const Home = ({ searchParams }: HomeProps) => {
       <HomeFilter />
 
       <div className="mt-10 flex w-full flex-col gap-6">
-        {filteredQuestions.map((q, i) => (
-          <p key={i}>{q.title}</p>
-        ))}
+        {filteredQuestions.length > 0 ? (
+          filteredQuestions.map((question) => (
+            <QuestionCard key={question._id} question={question} />
+          ))
+        ) : (
+          <p className="text-center text-dark200_light800">
+            No questions found. Try adjusting your search or filters.
+          </p>
+        )}
       </div>
     </>
   );
